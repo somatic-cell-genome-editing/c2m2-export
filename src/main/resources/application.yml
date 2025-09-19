@@ -1,0 +1,63 @@
+# SCGE C2M2 Submission Generator Configuration
+# Configure your PostgreSQL database connection below
+
+spring:
+  application:
+    name: "SCGE C2M2 Submission Generator"
+  
+# Database Configuration
+database:
+  # PostgreSQL connection URL - Configure for your environment
+  url: ${DB_URL:jdbc:postgresql://localhost:5432/scgedb}
+  
+  # Authentication - Use environment variables for security
+  username: ${DB_USERNAME:dbuser}    # Database username
+  password: ${DB_PASSWORD:dbpass}    # Database password
+  
+  # Connection Pool Settings (HikariCP)
+  pool:
+    max-size: 10
+    connection-timeout: 30000
+    idle-timeout: 600000
+    max-lifetime: 1800000
+
+# Logging Configuration
+logging:
+  level:
+    org.scge.c2m2: INFO
+    org.springframework: WARN
+    com.zaxxer.hikari: INFO
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} -- %msg%n"
+    
+# C2M2 Generation Configuration
+c2m2:
+  generation:
+    # Batch processing settings
+    batch-size: 1000
+    max-entities-per-table: 50000
+    
+    # Output settings
+    output-directory: "c2m2-output"
+    include-validation-reports: true
+    create-archive: true
+    
+    # Identifier settings
+    default-namespace: "scge.org"
+    identifier-strategy: "default"  # Options: default, uuid
+    
+  # Package settings
+  package:
+    organization: "Somatic Cell Genome Editing Program"
+    contact-email: "data@scge.org"
+    data-coordinating-center: "SCGE"
+    
+# Management endpoints (for monitoring)
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+  endpoint:
+    health:
+      show-details: when-authorized
